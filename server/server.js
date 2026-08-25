@@ -4,13 +4,19 @@ const fs=require('fs');
 const path=require('path');
 const app=express();
 app.use(express.json());
-app.use(express.static(__dirname+'/..'));
 
 const PSP_URL=process.env.PSP_URL||'';
 const PSP_KEY=process.env.PSP_KEY||'';
 const ADMIN_KEY=process.env.ADMIN_KEY||'0120767';
+const ADMIN_SECRET=process.env.ADMIN_SECRET||'14c2e8541c2086fab0835b94e01f6e34';
 const PORT=process.env.PORT||3000;
 const DB_PATH=path.join(__dirname,'data','db.json');
+
+app.get('/admin.html',function(req,res){res.status(404).send('Not found')});
+app.get('/admin',function(req,res){res.status(404).send('Not found')});
+app.get('/'+ADMIN_SECRET,function(req,res){res.sendFile(path.join(__dirname,'..','admin.html'))});
+
+app.use(express.static(__dirname+'/..'));
 
 function loadDB(){
   try{return JSON.parse(fs.readFileSync(DB_PATH,'utf8'))}
@@ -519,5 +525,5 @@ app.post('/api/deposit',async(req,res)=>{
 
 app.listen(PORT,()=>{
   console.log('ELITE BET server running on port '+PORT);
-  console.log('Admin panel: http://localhost:'+PORT+'/admin.html');
+  console.log('Admin panel: http://localhost:'+PORT+'/'+ADMIN_SECRET);
 });
