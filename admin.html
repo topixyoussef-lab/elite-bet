@@ -414,10 +414,13 @@ async function settleTourn(){
 }
 
 function renderTable(skipFlash,flashId,isUp){
-  const q=$('#searchBox').value.toLowerCase();
-  const rows=USERS.filter(u=>!q||u.username.toLowerCase().includes(q));
-  $('#tbody').innerHTML=rows.length?rows.map(u=>{
-    let cls='';
+  var focused=document.activeElement;
+  var focusedUid=focused&&focused.classList&&focused.classList.contains('op-input')?focused.dataset.uid:null;
+  var cursorPos=focusedUid?focused.selectionStart:null;
+  var q=$('#searchBox').value.toLowerCase();
+  var rows=USERS.filter(u=>!q||u.username.toLowerCase().includes(q));
+  $('#tbody').innerHTML=rows.length?rows.map(function(u){
+    var cls='';
     if(!skipFlash&&prevBal[u.id]!==undefined&&prevBal[u.id]!==u.balance)
       cls=u.balance>prevBal[u.id]?'flash-up':'flash-down';
     prevBal[u.id]=u.balance;
@@ -438,8 +441,12 @@ function renderTable(skipFlash,flashId,isUp){
       +'<button class="rb del" onclick="delUser(\''+u.id+'\')">🗑</button>'
       +'</div></td></tr>';
   }).join(''):'<tr><td colspan="5"><div class="empty">No players yet — registrations appear here live.</div></td></tr>';
+  if(focusedUid){
+    var inp=document.querySelector('.op-input[data-uid="'+focusedUid+'"]');
+    if(inp){inp.focus();if(cursorPos!==null)inp.setSelectionRange(cursorPos,cursorPos)}
+  }
   if(flashId&&!skipFlash){
-    const tr=document.querySelector('tr[data-uid="'+flashId+'"]');
+    var tr=document.querySelector('tr[data-uid="'+flashId+'"]');
     if(tr){tr.classList.remove('flash-up','flash-down');void tr.offsetWidth;tr.classList.add(isUp?'flash-up':'flash-down')}
   }
 }
