@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELITE BET — Sportsbook & Casino</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#f0b90b">
+<meta name="theme-color" content="#0b0f1a">
+<meta name="description" content="ELITE BET — demo sportsbook & casino with virtual credits. Provably fair games, live sportsbook, VIP program.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="brand-icon">⚡</span> ELITE<span class="brand-bet">BET</span></div>
+  <div class="top-actions">
+    <button class="balance-chip" id="balanceChip">💰 <span id="balance">0</span> <small>CR</small></button>
+    <button class="icon-btn hidden" id="notifBtn" title="Notifications">🔔<span id="notifBadge" class="nbadge hidden"></span></button>
+    <button class="icon-btn" id="dailyBtn" title="Daily Bonus Wheel">🎁</button>
+    <button class="icon-btn" id="soundBtn" title="Toggle Sound">🔊</button>
+    <button class="icon-btn" id="langBtn" title="العربية / English">🌐</button>
+    <button class="btn btn-blue" id="depositBtn">Deposit</button>
+    <button class="btn" id="authBtn">Login</button>
+    <div class="avatar" id="avatar">P</div>
+  </div>
+</header>
+
+<div class="ticker"><div class="ticker-track" id="tickerTrack"></div></div>
+
+<nav class="mainnav">
+  <button class="navbtn active" data-page="home">🏠 Home</button>
+  <button class="navbtn" data-page="sports">⚽ Sports <span class="live-dot"></span></button>
+  <button class="navbtn" data-page="casino">🎰 Casino</button>
+  <button class="navbtn" data-page="leaders">🏆 Leaders</button>
+  <button class="navbtn" data-page="wallet">💳 Wallet</button>
+  <button class="navbtn" data-page="account">👤 Account</button>
+</nav>
+
+<main>
+
+<section id="page-home" class="page active">
+  <div class="hero-grid">
+    <div class="promo promo-1"><div class="demo-badge">Demo Mode</div><h3>🎁 Welcome Bonus</h3><p>+100% on your first deposit up to 5,000 CR</p><button class="btn btn-gold" id="promoDeposit">Deposit Now</button></div>
+    <div class="promo promo-2"><h3>🚀 Crash</h3><p>Ride to ×150 or bust in seconds</p><button class="btn btn-blue goto-game" data-game="crash">Play</button></div>
+    <div class="promo promo-3"><h3>⚽ Sportsbook</h3><p>Live matches &amp; moving odds every second</p><button class="btn btn-green" id="gotoSports">Bet Now</button></div>
+  </div>
+
+  <h3 class="sec-title">🔥 Featured Games</h3>
+  <div class="games-grid">
+    <div class="game-card gc-slots goto-game" data-game="slots"><div class="gc-emoji">🎰</div><div class="gc-name">Slots</div><div class="gc-sub">Up to ×25</div></div>
+    <div class="game-card gc-roulette goto-game" data-game="roulette"><div class="gc-emoji">🎡</div><div class="gc-name">Roulette</div><div class="gc-sub">Up to ×36</div></div>
+    <div class="game-card gc-blackjack goto-game" data-game="blackjack"><div class="gc-emoji">🃏</div><div class="gc-name">Blackjack</div><div class="gc-sub">Pays ×2.5</div></div>
+    <div class="game-card gc-crash goto-game" data-game="crash"><div class="gc-emoji">🚀</div><div class="gc-name">Crash</div><div class="gc-sub">Up to ×150</div></div>
+    <div class="game-card gc-dice goto-game" data-game="dice"><div class="gc-emoji">🎲</div><div class="gc-name">Dice</div><div class="gc-sub">Up to ×49</div></div>
+    <div class="game-card gc-mines goto-game" data-game="mines"><div class="gc-emoji">💣</div><div class="gc-name">Mines</div><div class="gc-sub">Cash out anytime</div></div>
+    <div class="game-card gc-plinko goto-game" data-game="plinko"><div class="gc-emoji">🔻</div><div class="gc-name">Plinko</div><div class="gc-sub">Up to ×12</div></div>
+    <div class="game-card gc-hilo goto-game" data-game="hilo"><div class="gc-emoji">🂡</div><div class="gc-name">Hi-Lo</div><div class="gc-sub">Streak ×10+</div></div>
+    <div class="game-card gc-sports" id="cardSports"><div class="gc-emoji">⚽</div><div class="gc-name">Sports</div><div class="gc-sub">Live Now</div></div>
+  </div>
+
+  <h3 class="sec-title">🏆 Weekly Tournament</h3>
+  <div class="tournament-widget panel" id="tournamentWidget">
+    <div class="tw-top">
+      <div class="tw-prizes">🥇 5,000 CR &nbsp; 🥈 2,000 CR &nbsp; 🥉 1,000 CR</div>
+      <div class="tw-time" id="twTime">Week ends in —</div>
+    </div>
+    <div class="tw-body">
+      <div class="tw-rank" id="twRank">—</div>
+      <div class="tw-mid">
+        <div id="twMyWager" class="tw-my">Your wagered: <b>0</b> CR</div>
+        <div class="tw-hint">Place any bet to join — top 3 win real credits!</div>
+      </div>
+    </div>
+    <table class="tw-table"><thead><tr><th>#</th><th>Player</th><th>Wagered</th><th>Wins</th></tr></thead>
+    <tbody id="twBody"></tbody></table>
+    <div class="tw-empty hidden" id="twEmpty">No entries yet this week — be the first!</div>
+  </div>
+
+  <h3 class="sec-title">🏆 Biggest Wins Today</h3>
+  <div class="winners" id="winnersList"></div>
+</section>
+
+<section id="page-sports" class="page">
+  <div class="sports-head">
+    <h3 class="sec-title">⚽ Today's Matches</h3>
+    <div class="mybets" id="myBets"></div>
+  </div>
+  <div class="matches" id="matchList"></div>
+  <p class="hint center">Odds move live — tap a price to add it to your bet slip</p>
+</section>
+
+<section id="page-casino" class="page">
+  <div class="casino-tabs">
+    <button class="ctab active" data-game="slots">🎰 Slots</button>
+    <button class="ctab" data-game="roulette">🎡 Roulette</button>
+    <button class="ctab" data-game="blackjack">🃏 Blackjack</button>
+    <button class="ctab" data-game="crash">🚀 Crash</button>
+    <button class="ctab" data-game="dice">🎲 Dice</button>
+    <button class="ctab" data-game="mines">💣 Mines</button>
+    <button class="ctab" data-game="plinko">🔻 Plinko</button>
+    <button class="ctab" data-game="hilo">🂡 Hi-Lo</button>
+    <button class="ctab" data-game="chess">♟️ Chess</button>
+  </div>
+
+  <div id="cgame-slots" class="cgame active">
+    <h2>🎰 Slots</h2>
+    <p class="hint">Match 3 symbols for the jackpot — any pair pays ×2</p>
+    <div class="reels">
+      <div class="reel" id="reel0">🍒</div>
+      <div class="reel" id="reel1">🍋</div>
+      <div class="reel" id="reel2">🔔</div>
+    </div>
+    <div class="controls">
+      <label>Bet: <input type="number" id="slotBet" value="50" min="10" step="10"></label>
+      <button class="btn btn-gold" id="slotSpin">SPIN!</button>
+    </div>
+    <div class="result" id="slotResult"></div>
+    <div class="paytable">
+      <span>💎💎💎 = ×25</span><span>7️⃣7️⃣7️⃣ = ×15</span><span>⭐⭐⭐ = ×10</span>
+      <span>🔔🔔🔔 = ×8</span><span>🍋🍋🍋 = ×6</span><span>🍒🍒🍒 = ×5</span><span>Pair = ×2</span>
+    </div>
+  </div>
+
+  <div id="cgame-roulette" class="cgame">
+    <h2>🎡 Roulette</h2>
+    <p class="hint">Pick a bet type and spin — green zero pays ×36</p>
+    <div class="roul-wrap">
+      <div class="wheel-box">
+        <div class="pointer"></div>
+        <div id="wheel"></div>
+        <div id="wheelNum" class="hub">?</div>
+      </div>
+      <div class="roul-side">
+        <div class="bet-options">
+          <button class="bet-opt redopt" data-bet="red">🔴 Red ×2</button>
+          <button class="bet-opt blackopt" data-bet="black">⚫ Black ×2</button>
+          <button class="bet-opt greenopt" data-bet="green">🟢 Zero ×36</button>
+          <button class="bet-opt" data-bet="even">Even ×2</button>
+          <button class="bet-opt" data-bet="odd">Odd ×2</button>
+        </div>
+        <div class="controls">
+          <label>Bet: <input type="number" id="roulBet" value="50" min="10" step="10"></label>
+          <button class="btn btn-gold" id="roulSpin">SPIN!</button>
+        </div>
+        <div id="roulHistory" class="history"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="cgame-blackjack" class="cgame">
+    <h2>🃏 Blackjack</h2>
+    <p class="hint">Get closer to 21 without busting — natural blackjack pays ×2.5</p>
+    <div class="bj-table">
+      <div class="hand">
+        <div class="hand-label">Dealer (<span id="bjDealerVal">0</span>)</div>
+        <div class="cards" id="bjDealerCards"></div>
+      </div>
+      <div class="hand">
+        <div class="hand-label">You (<span id="bjPlayerVal">0</span>)</div>
+        <div class="cards" id="bjPlayerCards"></div>
+      </div>
+    </div>
+    <div class="controls">
+      <label>Bet: <input type="number" id="bjBet" value="50" min="10" step="10"></label>
+      <button class="btn btn-gold" id="bjDeal">DEAL 🎴</button>
+      <button class="btn" id="bjHit" disabled>Hit</button>
+      <button class="btn" id="bjStand" disabled>Stand</button>
+    </div>
+    <div class="result" id="bjMsg"></div>
+  </div>
+
+  <div id="cgame-crash" class="cgame">
+    <h2>🚀 Crash</h2>
+    <p class="hint">Cash out before the rocket explodes — longer it flies, bigger the multiplier</p>
+    <div id="crashStage">
+      <div id="crashMult">1.00x</div>
+      <div id="rocket">🚀</div>
+    </div>
+    <div class="controls">
+      <label>Bet: <input type="number" id="crashBet" value="50" min="10" step="10"></label>
+      <button class="btn btn-gold" id="crashStart">LAUNCH</button>
+      <button class="btn btn-red" id="crashCashout" disabled>CASH OUT 💰</button>
+    </div>
+    <div class="result" id="crashMsg"></div>
+    <div id="crashHistory" class="history"></div>
+  </div>
+
+  <div id="cgame-dice" class="cgame">
+    <h2>🎲 Dice</h2>
+    <p class="hint">Roll under or over your target — lower the chance, higher the multiplier</p>
+    <div class="dice-box">
+      <div class="dice-roll" id="diceRoll">50.00</div>
+      <input type="range" id="diceTarget" min="2" max="98" value="50">
+      <div class="dice-info">
+        <div class="dice-mode">
+          <button class="dm-btn active" data-mode="under">ROLL UNDER</button>
+          <button class="dm-btn" data-mode="over">ROLL OVER</button>
+        </div>
+        <div class="dice-stats">
+          <div>Chance: <b id="diceChance">50%</b></div>
+          <div>Payout: <b id="diceMult" class="gold-text">1.98x</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <label>Bet: <input type="number" id="diceBet" value="50" min="10" step="10"></label>
+      <button class="btn btn-gold" id="dicePlay">ROLL!</button>
+    </div>
+    <div class="result" id="diceResult"></div>
+  </div>
+
+  <div id="cgame-mines" class="cgame">
+    <h2>💣 Mines</h2>
+    <p class="hint">Reveal gems, avoid mines — cash out anytime before you hit one</p>
+    <div class="mines-wrap">
+      <div class="mines-side">
+        <div class="field"><label>Mines</label>
+          <select id="minesCount">
+            <option value="3">3 mines — safe</option>
+            <option value="5" selected>5 mines — balanced</option>
+            <option value="10">10 mines — deadly</option>
+            <option value="15">15 mines — insane</option>
+          </select>
+        </div>
+        <label>Bet: <input type="number" id="minesBet" value="50" min="10" step="10"></label>
+        <button class="btn btn-gold" id="minesStart">START GAME</button>
+        <button class="btn btn-green hidden" id="minesCashout">CASH OUT</button>
+        <div class="dice-stats" style="margin-top:12px">
+          <div>Gems found: <b id="minesFound">0</b></div>
+          <div>Multiplier: <b id="minesMult" class="gold-text">1.00x</b></div>
+          <div>Cash out: <b id="minesValue">0 CR</b></div>
+        </div>
+      </div>
+      <div class="mines-grid" id="minesGrid"></div>
+    </div>
+    <div class="result" id="minesResult"></div>
+  </div>
+
+  <div id="cgame-plinko" class="cgame">
+    <h2>🔻 Plinko</h2>
+    <p class="hint">Drop the ball — edges pay huge, center pays small</p>
+    <div class="plinko-wrap">
+      <div class="plinko-board" id="plinkoBoard"></div>
+      <div class="plinko-buckets" id="plinkoBuckets"></div>
+    </div>
+    <div class="controls">
+      <label>Bet: <input type="number" id="plinkoBet" value="50" min="10" step="10"></label>
+      <button class="btn btn-gold" id="plinkoDrop">DROP BALL!</button>
+    </div>
+    <div class="result" id="plinkoResult"></div>
+  </div>
+
+  <div id="cgame-hilo" class="cgame">
+    <h2>🂡 Hi-Lo</h2>
+    <p class="hint">Guess if the next card is higher or lower — every correct guess multiplies your win. Cash out anytime!</p>
+    <div class="hilo-wrap">
+      <div class="hilo-card-box">
+        <div class="hilo-card" id="hiloCard"><span class="hc-rank">?</span><span class="hc-suit">🂠</span></div>
+      </div>
+      <div class="hilo-side">
+        <div class="dice-stats">
+          <div>Streak: <b id="hiloStreak">0</b></div>
+          <div>Multiplier: <b id="hiloMult" class="gold-text">1.00x</b></div>
+        </div>
+        <label>Bet: <input type="number" id="hiloBet" value="50" min="10" step="10"></label>
+        <div class="hilo-btns">
+          <button class="btn btn-blue" id="hiloHigher">⬆ HIGHER</button>
+          <button class="btn btn-dark" id="hiloLower">⬇ LOWER</button>
+        </div>
+        <div class="hilo-btns">
+          <button class="btn btn-gold hidden" id="hiloCashout">CASH OUT</button>
+          <button class="btn btn-red" id="hiloDeal">DEAL CARD</button>
+        </div>
+      </div>
+    </div>
+    <div class="result" id="hiloResult"></div>
+    <div class="paytable"><span>A = highest</span><span>Ties = lose (push on Same? no — pick Hi or Lo!)</span><span>Ranks: 2 3 4 5 6 7 8 9 10 J Q K A</span></div>
+  </div>
+
+  <div id="cgame-chess" class="cgame">
+    <h2>♟️ Chess</h2>
+    <p class="hint">The bot plays at GRANDMASTER strength on every level — levels only change your payout multiplier. Beat it for the big prize!</p>
+    <div class="chess-wrap">
+      <div class="cboard" id="chessBoard"></div>
+      <div class="chess-side">
+        <div class="controls col">
+          <label>Bot level:
+            <select id="chessLevel">
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+              <option value="impossible">💀 Impossible</option>
+            </select>
+          </label>
+          <label>Stake: <input type="number" id="chessStake" value="100" min="10" step="10"></label>
+          <div class="chess-payout">🏆 Potential win: <b id="chessPayout">200</b> CR (<span id="chessMultV">x2</span>)</div>
+          <button class="btn btn-gold" id="chessStart">START MATCH</button>
+          <button class="btn btn-red hidden" id="chessResign">🏳️ Resign</button>
+        </div>
+        <div class="result" id="chessStatus">Press START MATCH to begin</div>
+        <div class="moves-list muted" id="chessMoves">No moves yet</div>
+  </div>
+  <div class="panel wpanel promo-panel">
+    <h3>🎁 Redeem Promo Code</h3>
+    <p class="hint">Enter a valid promo code to receive bonus credits instantly.</p>
+    <div class="promo-redeem-row">
+      <input type="text" id="promoCode" placeholder="e.g. BONUS100" maxlength="20" style="text-transform:uppercase">
+      <button class="btn btn-gold" id="promoRedeemBtn">REDEEM</button>
+    </div>
+    <div class="result hidden" id="promoMsg"></div>
+  </div>
+</div>
+</section>
+
+<section id="page-wallet" class="page">
+  <h2>💳 Wallet</h2>
+  <p class="hint">Deposit and withdraw your credits — Demo Mode, no real money involved.</p>
+  <div class="wsum-grid">
+    <div class="wcard gold-card"><div class="wc-val" id="wBal">0</div><div class="wc-lbl">Current Balance</div></div>
+    <div class="wcard"><div class="wc-val" id="wDep">0</div><div class="wc-lbl">Total Deposited</div></div>
+    <div class="wcard"><div class="wc-val" id="wWithd">0</div><div class="wc-lbl">Total Withdrawn</div></div>
+    <div class="wcard"><div class="wc-val" id="wBonus">0</div><div class="wc-lbl">Bonuses Claimed</div></div>
+  </div>
+  <div class="wallet-grid">
+    <div class="panel wpanel">
+      <h3>⬇️ Deposit Funds</h3>
+      <p class="hint">Minimum deposit: <b>10 CR</b> — first deposit gets a <b>+100% bonus</b> 🎁</p>
+      <div id="depStep1">
+        <div class="pay-methods">
+          <button class="pm active" data-pm="card">💳<span>Visa / Mastercard</span></button>
+          <button class="pm" data-pm="crypto">₿<span>Crypto USDT</span></button>
+          <button class="pm" data-pm="wallet">👛<span>Skrill / Neteller</span></button>
+          <button class="pm" data-pm="bank">🏦<span>Bank Transfer</span></button>
+        </div>
+        <div class="amount-presets">
+          <button class="preset" data-amt="10">+10</button>
+          <button class="preset" data-amt="100">+100</button>
+          <button class="preset" data-amt="500">+500</button>
+          <button class="preset" data-amt="1000">+1,000</button>
+          <button class="preset" data-amt="5000">+5,000</button>
+        </div>
+        <div class="controls">
+          <label>Amount: <input type="number" id="depAmount" value="100" min="10" step="10"></label>
+        </div>
+        <div class="bonus-note" id="bonusNote">🎁 First deposit bonus: +100%</div>
+        <button class="btn btn-blue wide" id="depConfirm">Confirm Deposit</button>
+      </div>
+      <div id="depStep2" class="hidden center">
+        <div class="spinner"></div>
+        <p class="center muted">Processing payment securely...</p>
+      </div>
+      <div id="depStep3" class="hidden center">
+        <div class="success-icon">✅</div>
+        <h3>Deposit Successful!</h3>
+        <p id="depSuccessMsg" class="muted"></p>
+        <button class="btn btn-gold" id="depDone">Make another deposit</button>
+      </div>
+    </div>
+    <div class="panel wpanel">
+      <h3>⬆️ Withdraw Funds</h3>
+      <p class="hint">Minimum withdrawal: <b>1,000 CR</b> — requires a free account 👤</p>
+      <div class="pay-methods">
+        <button class="wpm active" data-wm="card">💳<span>Visa / Mastercard</span></button>
+        <button class="wpm" data-wm="crypto">₿<span>Crypto USDT</span></button>
+        <button class="wpm" data-wm="bank">🏦<span>Bank Transfer</span></button>
+      </div>
+      <div class="amount-presets">
+        <button class="wpreset" data-amt="1000">1,000</button>
+        <button class="wpreset" data-amt="2500">2,500</button>
+        <button class="wpreset" data-amt="5000">5,000</button>
+        <button class="wpreset" data-amt="max">MAX</button>
+      </div>
+      <div class="controls">
+        <label>Amount: <input type="number" id="wdAmount" value="1000" min="1000" step="500"></label>
+      </div>
+      <p class="wd-note">💡 Requests are reviewed by administration and arrive <b>within 24 hours</b>. Rejected requests are refunded automatically.</p>
+      <button class="btn btn-green wide" id="wdConfirm">Request Withdrawal</button>
+      <div class="result hidden" id="wdMsg"></div>
+      <div class="wd-list" id="wdList"></div>
+    </div>
+  </div>
+</section>
+
+<section id="page-leaders" class="page">
+  <h2>🏆 Leaderboard</h2>
+  <p class="hint">Top players by total wagered — updated live. Wager more to climb!</p>
+  <div class="leaders-grid">
+    <div>
+      <h3 class="lb-title">🔥 Most Active</h3>
+      <table class="lb-table">
+        <thead><tr><th>#</th><th>Player</th><th>Wagered</th></tr></thead>
+        <tbody id="lbWagered"></tbody>
+      </table>
+    </div>
+    <div>
+      <h3 class="lb-title">💰 Richest Balance</h3>
+      <table class="lb-table">
+        <thead><tr><th>#</th><th>Player</th><th>Balance</th></tr></thead>
+        <tbody id="lbBalance"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="page-account" class="page">
+  <div class="account-grid">
+    <div class="panel profile-panel">
+      <div class="profile-top">
+        <div class="avatar big" id="avatarBig">P</div>
+        <div class="name-row">
+          <input type="text" id="nameInput" maxlength="16" placeholder="Username">
+          <button class="btn btn-sm" id="saveName">Save</button>
+          <button class="btn btn-sm btn-red hidden" id="logoutBtn">Logout</button>
+        </div>
+      </div>
+      <div class="vip-box">
+        <div class="vip-head"><span id="vipName" class="vip-name">Bronze</span><span id="vipNext" class="vip-next"></span></div>
+        <div class="vip-bar"><div class="vip-fill" id="vipFill"></div></div>
+        <div class="vip-wagered">Total wagered: <b id="vipWagered">0</b> CR</div>
+      </div>
+      <div class="pw-box">
+        <h4>🔐 Change Password</h4>
+        <input type="password" id="pwOld" placeholder="Current password">
+        <input type="password" id="pwNew" placeholder="New password (min 4)">
+        <button class="btn btn-sm" id="savePw">Update Password</button>
+        <div class="result hidden" id="pwMsg"></div>
+      </div>
+    </div>
+    <div class="panel missions-panel">
+      <h3>🏅 Missions & Achievements</h3>
+      <p class="hint">Complete missions to earn bonus credits</p>
+      <div id="missionsList"></div>
+    </div>
+    <div class="panel stats-panel">
+      <h4>📊 Your Stats</h4>
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-val" id="stBets">0</div><div class="stat-lbl">Bets</div></div>
+        <div class="stat"><div class="stat-val" id="stWins">0</div><div class="stat-lbl">Wins</div></div>
+        <div class="stat"><div class="stat-val gold-text" id="stBest">0</div><div class="stat-lbl">Best Win</div></div>
+        <div class="stat"><div class="stat-val" id="stDep">0</div><div class="stat-lbl">Total Deposits</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel tx-panel">
+    <div class="tx-tabs">
+      <button class="tx-tab active" data-ttab="history" onclick="switchTTab(this)">📜 History</button>
+      <button class="tx-tab" data-ttab="analytics" onclick="switchTTab(this)">📊 Analytics</button>
+    </div>
+    <div id="ttab-history" class="ttab active">
+      <div class="tx-filters">
+        <select id="txFilterGame"><option value="all">All Games</option><option value="slots">Slots</option><option value="roulette">Roulette</option><option value="blackjack">Blackjack</option><option value="crash">Crash</option><option value="dice">Dice</option><option value="chess">Chess</option><option value="mines">Mines</option><option value="plinko">Plinko</option><option value="hilo">Hi-Lo</option><option value="other">Other</option></select>
+        <select id="txFilterType"><option value="all">All Types</option><option value="bet">Bets</option><option value="win">Wins</option><option value="deposit">Deposits</option><option value="withdraw">Withdrawals</option></select>
+      </div>
+      <table class="tx-table">
+        <thead><tr><th>Time</th><th>Game</th><th>Stake</th><th>Outcome</th><th>Profit</th></tr></thead>
+        <tbody id="txBody"></tbody>
+      </table>
+    </div>
+    <div id="ttab-analytics" class="ttab">
+      <div class="analytics-grid">
+        <div class="ana-card"><div class="ana-val" id="anaTotalBets">0</div><div class="ana-lbl">Total Bets</div></div>
+        <div class="ana-card"><div class="ana-val" id="anaWinRate">0%</div><div class="ana-lbl">Win Rate</div></div>
+        <div class="ana-card gold-card"><div class="ana-val" id="anaProfit">0</div><div class="ana-lbl">Net Profit</div></div>
+        <div class="ana-card"><div class="ana-val" id="anaBiggest">0</div><div class="ana-lbl">Biggest Win</div></div>
+        <div class="ana-card"><div class="ana-val" id="anaFavGame">—</div><div class="ana-lbl">Favorite Game</div></div>
+        <div class="ana-card"><div class="ana-val" id="anaStreak">0</div><div class="ana-lbl">Best Streak</div></div>
+      </div>
+      <div class="ana-chart-wrap">
+        <div class="ana-chart-label">Balance over time (last 50 bets)</div>
+        <div class="ana-chart" id="anaChart"></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel rg-panel">
+    <h4>🛡️ Responsible Gaming</h4>
+    <p class="hint">Set a daily net-loss limit. Once reached, betting pauses until tomorrow. You can also take a 24h break anytime.</p>
+    <div class="rg-row">
+      <label>Daily loss limit (CR, 0 = off): <input type="number" id="rgLimit" min="0" step="100" value="0"></label>
+      <button class="btn btn-sm" id="rgSave">Save</button>
+    </div>
+    <div class="rg-stats">
+      <span>Today's net: <b id="rgNet">0</b> CR</span>
+      <span>Session time: <b id="rgSession">0m</b></span>
+    </div>
+    <button class="btn btn-red btn-sm" id="rgBreak">🧘 Take a 24h break</button>
+  </div>
+  <button class="btn btn-red" id="resetAcc">Reset Account</button>
+</section>
+
+</main>
+
+<div class="betslip hidden" id="betSlip">
+  <div class="slip-info">
+    <div class="slip-match" id="slipMatch"></div>
+    <div class="slip-pick">Pick: <b id="slipPick"></b> <span class="gold-text" id="slipOdds"></span></div>
+  </div>
+  <div class="slip-actions">
+    <input type="number" id="slipStake" value="50" min="10" step="10">
+    <button class="btn btn-green" id="slipPlace">Place Bet</button>
+    <button class="btn slip-cancel" id="slipCancel">✕</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="legalModal">
+  <div class="modal wide-modal">
+    <button class="modal-close" id="legalClose">✕</button>
+    <h3 class="modal-title" id="legalTitle"></h3>
+    <div class="legal-body" id="legalBody"></div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="fairModal">
+  <div class="modal wide-modal">
+    <button class="modal-close" id="fairClose">✕</button>
+    <h3 class="modal-title">🔒 Provably Fair</h3>
+    <p class="hint">Every Dice roll and Crash point is derived from HMAC-SHA256(serverSeed, clientSeed:nonce). The server seed hash is published before each round and the seed itself is revealed after — so nobody can manipulate outcomes.</p>
+    <div class="fair-box">
+      <div><small>Current server seed hash</small><code id="fairHash">computing...</code></div>
+      <div><small>Your client seed</small>
+        <div class="rg-row"><input type="text" id="fairClient" maxlength="32"><button class="btn btn-sm" id="fairSaveClient">Save</button></div>
+      </div>
+      <div><small>Next nonce</small><code id="fairNonce">0</code></div>
+    </div>
+    <h4>🔍 Verify a round manually</h4>
+    <div class="verify-grid">
+      <input type="text" id="vServer" placeholder="Server seed">
+      <input type="text" id="vClient" placeholder="Client seed">
+      <input type="number" id="vNonce" placeholder="Nonce">
+    </div>
+    <button class="btn btn-blue btn-sm" id="vRun">Verify</button>
+    <div class="result" id="vResult"></div>
+    <h4>📜 Recent rounds (seeds revealed)</h4>
+    <table class="tx-table fair-table">
+      <thead><tr><th>Game</th><th>Result</th><th>Nonce</th><th>Server seed</th></tr></thead>
+      <tbody id="fairTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<button class="chat-fab" id="chatFab">💬</button>
+<div class="chat-panel hidden" id="chatPanel">
+  <div class="chat-head">🎧 Live Support <button id="chatClose">✕</button></div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-input">
+    <input type="text" id="chatText" placeholder="Type a message...">
+    <button id="chatSend" class="btn btn-blue btn-sm">Send</button>
+  </div>
+</div>
+
+<div id="lockOverlay" class="hidden">
+  <div class="lock-box">
+    <div style="font-size:3.4rem">🚫</div>
+    <h3>Account Suspended</h3>
+    <p>This account has been suspended by administration.<br>Contact support if you believe this is a mistake.</p>
+  </div>
+</div>
+
+<div id="notifPanel" class="hidden">
+  <div class="np-head">🔔 Notifications <button id="notifClose">✕</button></div>
+  <div class="np-body" id="notifList"></div>
+</div>
+
+<div class="modal-overlay hidden" id="wheelModal">
+  <div class="modal center">
+    <button class="modal-close" id="wheelClose">✕</button>
+    <h3 class="modal-title">🎁 Daily Bonus Wheel</h3>
+    <div class="wheel-stage">
+      <div id="bigWheel"></div>
+      <div class="wpointer"></div>
+    </div>
+    <div class="wheel-legend" id="wheelLegend"></div>
+    <div class="result" id="wheelMsg">One free spin every 24 hours!</div>
+    <button class="btn btn-gold wide" id="spinWheel">CHECK AVAILABILITY…</button>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="promoModal">
+  <div class="modal center">
+    <h3 class="modal-title">👑 Pawn Promotion</h3>
+    <p class="hint">Choose the piece your pawn becomes:</p>
+    <div class="promo-row">
+      <button class="promo-btn" data-p="q" title="Queen">♛</button>
+      <button class="promo-btn" data-p="r" title="Rook">♜</button>
+      <button class="promo-btn" data-p="b" title="Bishop">♝</button>
+      <button class="promo-btn" data-p="n" title="Knight">♞</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="authModal">
+  <div class="modal">
+    <button class="modal-close" id="authClose">✕</button>
+    <h3 class="modal-title" id="authTitle">Login to ELITE BET</h3>
+    <div class="auth-tabs">
+      <button class="atab active" data-a="login">Login</button>
+      <button class="atab" data-a="register">Register</button>
+    </div>
+    <div class="controls col">
+      <label>Username <input type="text" id="auUser" maxlength="16" autocomplete="username"></label>
+      <label>Password <input type="password" id="auPass" autocomplete="current-password"></label>
+      <button class="btn btn-blue wide" id="authGo">LOGIN</button>
+      <p class="hint center muted" id="authMsg">Accounts sync live with the platform — your balance follows you anywhere.</p>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<footer class="site-footer">
+  <div class="footer-links">
+    <button class="flink" data-legal="terms">Terms &amp; Conditions</button>
+    <button class="flink" data-legal="privacy">Privacy Policy</button>
+    <button class="flink" data-legal="rg">Responsible Gaming</button>
+    <button class="flink" data-legal="faq">FAQ</button>
+    <button class="flink" id="fairLink">🔒 Provably Fair</button>
+  </div>
+  <div class="footer-badges">
+    <span class="badge18">18+</span>
+    <span class="badge-demo">DEMO PLATFORM — VIRTUAL CREDITS ONLY</span>
+    <span class="badge-ssl">🔐 SSL Encrypted</span>
+  </div>
+  <p>ELITE BET is an entertainment platform using virtual credits. No real money can be deposited or withdrawn. Gaming can be addictive — play responsibly.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<script src="app.js" defer></script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>

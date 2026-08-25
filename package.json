@@ -1,0 +1,15 @@
+{
+  "name": "elite-bet",
+  "version": "3.0.0",
+  "description": "ELITE BET — Sportsbook & Casino (demo credits)",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ELITE BET — Admin Console</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif}
+body{background:#0a0e17;color:#dfe6f2;min-height:100vh}
+a{color:#f0b90b}
+.gate{max-width:420px;margin:12vh auto;background:#111827;border:1px solid #232c3d;border-radius:16px;padding:32px;text-align:center}
+.gate h1{color:#f0b90b;margin-bottom:6px;font-size:1.5rem}
+.gate p{color:#8b93a7;font-size:.85rem;margin-bottom:20px}
+.gate input{width:100%;padding:12px 14px;background:#1a2233;border:1px solid #2b3648;border-radius:10px;color:#fff;font-size:1rem;text-align:center}
+.gate button{width:100%;margin-top:14px;padding:12px;background:#f0b90b;border:none;border-radius:10px;font-weight:800;font-size:1rem;cursor:pointer;color:#111}
+.err{color:#ff5b5b;font-size:.85rem;min-height:1.2em;margin-top:10px}
+#panel{display:none;padding:18px 22px}
+.topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.brand{font-weight:900;font-size:1.25rem;color:#fff}.brand span{color:#f0b90b}
+.live{display:flex;align-items:center;gap:6px;font-size:.8rem;color:#8b93a7}
+.dot{width:9px;height:9px;border-radius:50%;background:#00e701;animation:pulse 1.4s infinite}
+.dot.off{background:#ff5b5b;animation:none}
+@keyframes pulse{50%{opacity:.35}}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.card{background:#111827;border:1px solid #232c3d;border-radius:12px;padding:14px}
+.card .v{font-size:1.45rem;font-weight:900;color:#f0b90b}
+.card .l{font-size:.72rem;color:#8b93a7;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tab{padding:9px 18px;border-radius:10px;background:#111827;border:1px solid #232c3d;color:#8b93a7;font-weight:700;cursor:pointer;font-size:.88rem}
+.tab.on{background:#f0b90b;color:#111;border-color:#f0b90b}
+.pane{display:none}.pane.on{display:block}
+.search{width:100%;max-width:340px;padding:10px 14px;background:#111827;border:1px solid #2b3648;border-radius:10px;color:#fff;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;background:#111827;border-radius:12px;overflow:hidden;font-size:.86rem}
+th{background:#151d2e;color:#8b93a7;text-align:left;padding:10px 12px;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em}
+td{padding:10px 12px;border-top:1px solid #1c2434}
+tr:hover td{background:#141c2d}
+.uname{font-weight:700;display:flex;align-items:center;gap:7px}
+.mini-dot{width:8px;height:8px;border-radius:50%;background:#3a4356}
+.mini-dot.on{background:#00e701;box-shadow:0 0 6px #00e701}
+.bal{font-weight:800;color:#f0b90b;transition:background .3s}
+.flash-up td{animation:fup 1.2s}.flash-down td{animation:fdn 1.2s}
+@keyframes fup{0%{background:rgba(0,231,1,.28)}100%{background:transparent}}
+@keyframes fdn{0%{background:rgba(255,91,91,.28)}100%{background:transparent}}
+.tag{font-size:.62rem;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.04em}
+.tag.ban{background:rgba(255,91,91,.15);color:#ff5b5b;border:1px solid rgba(255,91,91,.4)}
+.row-btns{display:flex;gap:5px;flex-wrap:wrap}
+.rb{padding:5px 9px;border-radius:8px;border:1px solid #2b3648;background:#1a2233;color:#dfe6f2;cursor:pointer;font-size:.78rem;font-weight:700}
+.rb:hover{border-color:#f0b90b;color:#f0b90b}
+.rb.add{color:#2ee56b}.rb.sub{color:#ff8080}.rb.set{color:#57b3ff}.rb.del{color:#ff5b5b}.rb.msg{color:#ffd75b}.rb.ban{color:#ff9d42}
+.tab-badge{background:#ff3b5c;color:#fff;font-size:.62rem;font-weight:800;padding:1px 7px;border-radius:12px;margin-left:4px}
+.wd-chip{font-size:.68rem;font-weight:800;padding:3px 10px;border-radius:20px}
+.wd-chip.pending{background:rgba(240,185,11,.15);color:#f0b90b;border:1px solid rgba(240,185,11,.4)}
+.wd-chip.paid{background:rgba(46,229,107,.13);color:#2ee56b;border:1px solid rgba(46,229,107,.4)}
+.wd-chip.rejected{background:rgba(255,91,91,.13);color:#ff5b5b;border:1px solid rgba(255,91,91,.4)}
+.op-input{width:74px;padding:5px 7px;background:#0d1320;border:1px solid #2b3648;border-radius:7px;color:#fff;font-size:.82rem}
+.hint{color:#8b93a7;font-size:.78rem;margin:8px 0 14px}
+.ctl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;max-width:900px}
+.ctl{background:#111827;border:1px solid #232c3d;border-radius:12px;padding:16px}
+.ctl h4{margin-bottom:4px;color:#fff}
+.ctl .desc{font-size:.75rem;color:#8b93a7;margin-bottom:12px}
+.ctl input[type=range]{width:100%;accent-color:#f0b90b}
+.ctl .val{float:right;color:#f0b90b;font-weight:800}
+.btn-gold{background:#f0b90b;color:#111;border:none;border-radius:10px;padding:11px 26px;font-weight:800;cursor:pointer;font-size:.95rem}
+.btn-gold:hover{filter:brightness(1.1)}
+textarea{width:100%;min-height:110px;background:#111827;border:1px solid #2b3648;border-radius:10px;color:#fff;padding:12px;resize:vertical;font-family:inherit}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:.78rem;color:#8b93a7;margin-bottom:6px}
+.field input,.field select{width:100%;max-width:380px;padding:10px 12px;background:#111827;border:1px solid #2b3648;border-radius:10px;color:#fff}
+.okmsg{color:#2ee56b;font-size:.85rem;min-height:1.2em;margin-top:8px}
+.chart{display:flex;align-items:flex-end;gap:3px;height:140px;background:#111827;border:1px solid #232c3d;border-radius:12px;padding:12px;margin-top:14px}
+.bar{flex:1;background:linear-gradient(to top,#f0b90b,#ffd75b);border-radius:3px 3px 0 0;min-height:2px;position:relative}
+.bar.blue{background:linear-gradient(to top,#2f81f7,#79b8ff)}
+.empty{text-align:center;color:#8b93a7;padding:40px 0}
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <h1>ELITE <span style="color:#f0b90b">BET</span></h1>
+  <p>Admin Console — restricted access</p>
+  <input type="password" id="keyInput" placeholder="Admin key">
+  <button onclick="tryKey()">UNLOCK →</button>
+  <div class="err" id="gateErr"></div>
+</div>
+
+<div id="panel">
+  <div class="topbar">
+    <div class="brand">ELITE <span>BET</span> · ADMIN</div>
+    <div class="live"><span class="dot" id="connDot"></span><span id="connTxt">Live</span></div>
+  </div>
+  <div class="cards" id="cards"></div>
+  <div class="tabs">
+    <div class="tab on" data-pane="p-players" onclick="showTab(this)">👥 Players</div>
+    <div class="tab" data-pane="p-control" onclick="showTab(this)">🎛 Game Control</div>
+    <div class="tab" data-pane="p-msgs" onclick="showTab(this)">✉ Notifications</div>
+    <div class="tab" data-pane="p-wd" onclick="showTab(this)">💸 Withdrawals <span class="tab-badge hidden" id="wdBadge"></span></div>
+    <div class="tab" data-pane="p-promos" onclick="showTab(this)">🎟 Promos</div>
+    <div class="tab" data-pane="p-tournament" onclick="showTab(this)">🏆 Tournament</div>
+    <div class="tab" data-pane="p-stats" onclick="showTab(this)">📊 Stats</div>
+  </div>
+
+  <div class="pane on" id="p-players">
+    <input class="search" id="searchBox" placeholder="Search player…">
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Player</th><th>Balance</th><th>Wagered</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table></div>
+    <div class="hint">+ Add credits · − Deduct · = Set exact · ✉ Message · 🚫 Ban/Unban · 🗑 Delete permanently</div>
+  </div>
+
+  <div class="pane" id="p-control">
+    <div class="hint" style="max-width:720px">House Edge (%). Higher edge = lower player payouts. Changes apply to every player within ~3 seconds.</div>
+    <div class="ctl-grid">
+      <div class="ctl"><h4>Dice <span class="val" id="v-dice"></span></h4><div class="desc">Edge points subtracted from the 99× payout numerator.</div><input type="range" min="0" max="10" step="0.5" id="s-dice" oninput="updLbl('dice')"></div>
+      <div class="ctl"><h4>Crash <span class="val" id="v-crash"></span></h4><div class="desc">Percentage points removed from the 97% RTP base.</div><input type="range" min="0" max="10" step="0.5" id="s-crash" oninput="updLbl('crash')"></div>
+      <div class="ctl"><h4>Roulette (Green) <span class="val" id="v-roulette"></span></h4><div class="desc">Green pocket multiplier (base ×36).</div><input type="range" min="0" max="20" step="0.5" id="s-roulette" oninput="updLbl('roulette')"></div>
+      <div class="ctl"><h4>Slots <span class="val" id="v-slots"></span></h4><div class="desc">Reserved edge parameter (visual).</div><input type="range" min="0" max="20" step="0.5" id="s-slots" oninput="updLbl('slots')"></div>
+    </div>
+    <br><button class="btn-gold" onclick="saveCfg()">💾 SAVE & APPLY TO ALL PLAYERS</button>
+    <div class="okmsg" id="cfgMsg"></div>
+  </div>
+
+  <div class="pane" id="p-msgs">
+    <div class="hint" style="max-width:720px">Send an in-app notification. Players see it in the 🔔 bell within ~15 seconds.</div>
+    <div class="field"><label>Recipient</label>
+      <select id="msgTarget" onchange="$('#customUser').style.display=this.value==='user'?'block':'none'">
+        <option value="all">📢 All players (broadcast)</option>
+        <option value="user">👤 Specific username…</option>
+      </select>
+      <input id="customUser" placeholder="Username" style="display:none;margin-top:8px">
+    </div>
+    <div class="field"><label>Message</label>
+      <textarea id="msgText" placeholder="e.g. 🎉 Weekend tournament starts Friday — $5,000 prize pool!"></textarea>
+    </div>
+    <button class="btn-gold" onclick="sendMsg()">📨 SEND NOTIFICATION</button>
+    <div class="okmsg" id="msgStatus"></div>
+  </div>
+
+  <div class="pane" id="p-wd">
+    <div class="hint" style="max-width:760px">Player withdrawal requests — balance is already deducted. Approve to mark as paid, or reject to auto-refund the player.</div>
+    <table>
+      <thead><tr><th>Time</th><th>Player</th><th>Amount</th><th>Method</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="wdBody"></tbody>
+    </table>
+  </div>
+
+  <div class="pane" id="p-promos">
+    <div class="hint" style="max-width:720px">Create promo codes that players can redeem for bonus credits.</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;align-items:end">
+      <div class="field"><label>Code</label><input id="promoCodeInput" placeholder="BONUS100" maxlength="20" style="text-transform:uppercase"></div>
+      <div class="field"><label>Reward (CR)</label><input id="promoRewardInput" type="number" value="500" min="1"></div>
+      <div class="field"><label>Max uses (0=unlimited)</label><input id="promoMaxInput" type="number" value="0" min="0"></div>
+      <div class="field"><label>Expires in days (0=never)</label><input id="promoExpInput" type="number" value="0" min="0"></div>
+      <button class="btn-gold" onclick="createPromo()">+ CREATE CODE</button>
+    </div>
+    <div class="okmsg" id="promoAdminMsg"></div>
+    <table>
+      <thead><tr><th>Code</th><th>Reward</th><th>Uses</th><th>Expires</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="promoBody"></tbody>
+    </table>
+  </div>
+
+  <div class="pane" id="p-tournament">
+    <div class="hint" style="max-width:720px">Weekly tournament — players auto-join when they place any bet. Top 3 at week end win prizes (5,000 / 2,000 / 1,000 CR).</div>
+    <div id="twInfo"></div>
+    <table>
+      <thead><tr><th>#</th><th>Player</th><th>Wagered</th><th>Wins</th></tr></thead>
+      <tbody id="twAdminBody"></tbody>
+    </table>
+    <button class="btn-gold" style="margin-top:14px" onclick="settleTourn()">🏁 SETTLE WEEK NOW</button>
+    <div class="okmsg" id="twAdminMsg"></div>
+  </div>
+
+  <div class="pane" id="p-stats">
+    <div class="cards" id="statCards"></div>
+    <table style="max-width:640px">
+      <thead><tr><th>#</th><th>Top player (by wagered)</th><th>Wagered</th><th>Balance</th></tr></thead>
+      <tbody id="topBody"></tbody>
+    </table>
+    <div class="hint" style="margin-top:16px">Live activity — online players (gold) vs total balance (blue)</div>
+    <div class="chart" id="chart"></div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+let KEY=sessionStorage.getItem('ab_key')||'';
+let USERS=[];
+const prevBal={},inputs={};
+let hist=[];
+
+function api(path,body){
+  return fetch('/api'+path,{
+    method:body?'POST':'GET',
+    headers:{'x-admin-key':KEY,'Content-Type':'application/json'},
+    body:body?JSON.stringify(body):undefined
+  }).then(r=>r.json());
+}
+
+function tryKey(){
+  KEY=$('#keyInput').value.trim();
+  api('/admin/users').then(d=>{
+    if(d.ok){
+      sessionStorage.setItem('ab_key',KEY);
+      $('#gate').style.display='none';
+      $('#panel').style.display='block';
+      start();
+    }else{
+      $('#gateErr').textContent=d.error==='bad_key'?'Wrong admin key':'Connection failed';
+    }
+  }).catch(()=>$('#gateErr').textContent='Server unreachable');
+}
+$('#keyInput').addEventListener('keydown',e=>{if(e.key==='Enter')tryKey()});
+
+function showTab(el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById(el.dataset.pane).classList.add('on');
+}
+
+function start(){
+  const es=new EventSource('/api/admin/stream?key='+encodeURIComponent(KEY));
+  es.onmessage=e=>{
+    USERS=JSON.parse(e.data).users;
+    $('#connDot').classList.remove('off');$('#connTxt').textContent='Live';
+    renderCards();renderTable();
+  };
+  es.onerror=()=>{$('#connDot').classList.add('off');$('#connTxt').textContent='Reconnecting…'};
+  loadCfg();
+  loadStats();
+  loadWd();
+  setInterval(loadStats,5000);
+  setInterval(loadWd,4000);
+  setInterval(loadPromos,8000);
+  setInterval(loadTournament,5000);
+  setInterval(saveInputs,3000);
+}
+
+async function loadCfg(){
+  const d=await api('/admin/config');
+  if(d.ok){
+    ['dice','crash','roulette','slots'].forEach(k=>{
+      $('#s-'+k).value=d.cfg.edge[k];
+      updLbl(k);
+    });
+  }
+}
+function updLbl(k){
+  $('#v-'+k).textContent='×'+Number($('#s-'+k).value).toFixed(1);
+}
+async function saveCfg(){
+  const edge={};
+  ['dice','crash','roulette','slots'].forEach(k=>edge[k]=+$('#s-'+k).value);
+  const d=await api('/admin/config',{edge});
+  if(d.ok)$('#cfgMsg').textContent='✅ Applied — all players updated live.';
+}
+
+const WD_CHIP={pending:'⏳ Pending',paid:'✅ Paid',rejected:'❌ Rejected'};
+async function loadWd(){
+  const d=await api('/admin/withdrawals');
+  if(!d.ok)return;
+  const badge=$('#wdBadge');
+  if(d.pendingCount>0){badge.textContent=d.pendingCount;badge.classList.remove('hidden')}
+  else badge.classList.add('hidden');
+  const rows=d.items.slice(0,50);
+  $('#wdBody').innerHTML=rows.length?rows.map(w=>{
+    const st=w.status==='paid'?'paid':w.status==='rejected'?'rejected':'pending';
+    const acts=w.status==='pending'
+      ?'<button class="rb add" onclick="actWd(\''+w.id+'\',\'paid\')">✅ Mark Paid</button>'
+       +'<button class="rb del" onclick="actWd(\''+w.id+'\',\'rejected\')">❌ Reject & Refund</button>'
+      :'<span style="color:#68738c;font-size:.75rem">processed</span>';
+    return '<tr'+(st==='pending'?' style="background:rgba(240,185,11,.05)"':'')+'>'
+      +'<td>'+new Date(w.t).toLocaleString()+'</td>'
+      +'<td class="uname">'+w.username.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'})[c])+'</td>'
+      +'<td class="bal">'+w.amount.toLocaleString()+' CR</td>'
+      +'<td>'+w.method.toUpperCase()+'</td>'
+      +'<td><span class="wd-chip '+st+'">'+WD_CHIP[st]+'</span></td>'
+      +'<td><div class="row-btns">'+acts+'</div></td></tr>';
+  }).join(''):'<tr><td colspan="6"><div class="empty">No withdrawal requests yet.</div></td></tr>';
+}
+async function actWd(id,status){
+  await api('/admin/wd-status',{id,status});
+  loadWd();
+}
+
+async function sendMsg(){  let target=$('#msgTarget').value;
+  if(target==='user'){
+    const name=$('#customUser').value.trim().toLowerCase();
+    const u=USERS.find(x=>x.username.toLowerCase()===name);
+    if(!u){$('#msgStatus').style.color='#ff5b5b';$('#msgStatus').textContent='User not found';return}
+    target=u.id;
+  }
+  const text=$('#msgText').value.trim();
+  if(!text){$('#msgStatus').style.color='#ff5b5b';$('#msgStatus').textContent='Message is empty';return}
+  const d=await api('/admin/message',{userId:target,text});
+  if(d.ok){
+    $('#msgStatus').style.color='#2ee56b';
+    $('#msgStatus').textContent='✅ Sent to '+d.sent+' player(s)';
+    $('#msgText').value='';
+  }else{
+    $('#msgStatus').style.color='#ff5b5b';$('#msgStatus').textContent='Failed';
+  }
+}
+
+function saveInputs(){
+  document.querySelectorAll('.op-input').forEach(i=>{
+    if(i.value&&i.value!=='0')inputs[i.dataset.uid]=i.value;
+    else delete inputs[i.dataset.uid];
+  });
+}
+
+function op(uid,mode){
+  const raw=inputs[uid]??prompt((mode==='add'?'+ Add':mode==='sub'?'− Deduct':'Set balance to')+' amount:');
+  if(raw===null)return;
+  const v=parseFloat(raw);
+  if(!Number.isFinite(v)||v<0)return;
+  api('/admin/balance',{userId:uid,mode,value:v}).then(refreshRow);
+}
+async function refreshRow(d){
+  if(!d||!d.ok||!d.user)return;
+  USERS=USERS.map(u=>u.id===d.user.id?d.user:u);
+  renderCards();renderTable(true,d.user.id,d.user.balance>(prevBal[d.user.id]??d.user.balance));
+  prevBal[d.user.id]=d.user.balance;
+}
+async function banUser(uid){
+  const u=USERS.find(x=>x.id===uid);
+  await api('/admin/ban',{userId:uid,flag:!u.banned}).then(refreshRow);
+}
+async function msgUser(uid){
+  const t=prompt('Message to '+USERS.find(x=>x.id===uid).username+':');
+  if(!t)return;
+  await api('/admin/message',{userId:uid,text:t});
+}
+async function delUser(uid){
+  if(!confirm('Delete this player permanently?'))return;
+  await api('/admin/delete',{userId:uid});
+  USERS=USERS.filter(u=>u.id!==uid);
+  renderCards();renderTable();
+}
+
+function renderCards(){
+  const online=USERS.filter(u=>Date.now()-u.lastSeen<12000).length;
+  const bal=USERS.reduce((a,u)=>a+u.balance,0);
+  const wag=USERS.reduce((a,u)=>a+(u.wagered||0),0);
+  const banned=USERS.filter(u=>u.banned).length;
+  $('#cards').innerHTML=[
+    [USERS.length,'Players'],[online,'Online now'],
+    [bal.toLocaleString(),'Total Balance'],[wag.toLocaleString(),'Total Wagered'],
+    [banned,'Banned']
+  ].map(([v,l])=>'<div class="card"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>').join('');
+}
+
+async function loadPromos(){
+  const d=await api('/admin/promos');if(!d.ok)return;
+  $('#promoBody').innerHTML=d.codes.length?d.codes.map(p=>{
+    const exp=p.expiresAt?new Date(p.expiresAt).toLocaleDateString():'Never';
+    const open=p.maxUses>0&&p.usedCount>=p.maxUses;
+    const expired=p.expiresAt&&Date.now()>p.expiresAt;
+    const disabled=p.disabled;
+    const st=disabled?'Disabled':expired?'Expired':open?'Exhausted':'Active';
+    const stColor=disabled||expired||open?'#ff5b5b':'#2ee56b';
+    return '<tr><td style="font-weight:800;color:#f0b90b;letter-spacing:.04em">'+p.code+'</td>'
+      +'<td>'+p.reward.toLocaleString()+' CR</td>'
+      +'<td>'+(p.usedCount)+(p.maxUses?' / '+p.maxUses:' ∞')+'</td>'
+      +'<td>'+exp+'</td>'
+      +'<td style="color:'+stColor+';font-weight:700">'+st+'</td>'
+      +'<td>'+(disabled?'<span style="color:#68738c;font-size:.75rem">—</span>':'<button class="rb del" onclick="disablePromo(\''+p.id+'\')">Disable</button>')+'</td></tr>';
+  }).join(''):'<tr><td colspan="6"><div class="empty">No promo codes yet.</div></td></tr>';
+}
+async function createPromo(){
+  const code=$('#promoCodeInput').value.trim();
+  const reward=+$('#promoRewardInput').value;
+  const maxUses=+$('#promoMaxInput').value||0;
+  const expiresDays=+$('#promoExpInput').value||0;
+  if(!code||reward<1){$('#promoAdminMsg').style.color='#ff5b5b';$('#promoAdminMsg').textContent='Enter code and reward ≥1';return}
+  const d=await api('/admin/promos',{code,reward,maxUses,expiresDays});
+  if(d.ok){
+    $('#promoAdminMsg').style.color='#2ee56b';
+    $('#promoAdminMsg').textContent='✅ Code "'+d.promo.code+'" created — '+d.promo.reward+' CR';
+    $('#promoCodeInput').value='';loadPromos();
+  }else{
+    $('#promoAdminMsg').style.color='#ff5b5b';
+    $('#promoAdminMsg').textContent=d.error||'Failed';
+  }
+}
+async function disablePromo(id){await api('/admin/promos/disable',{id});loadPromos()}
+
+async function loadTournament(){
+  const d=await api('/tournament');
+  if(!d.ok)return;
+  $('#twInfo').innerHTML='<div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:14px">'
+    +'<div class="card"><div class="v">'+d.entries.length+'</div><div class="l">Players this week</div></div>'
+    +'<div class="card"><div class="v">⏱ '+d.remainingText+'</div><div class="l">Time remaining</div></div>'
+    +'<div class="card"><div class="v">🥇 5,000 CR</div><div class="l">First place prize</div></div></div>';
+  $('#twAdminBody').innerHTML=d.entries.length?d.entries.map((e,i)=>
+    '<tr><td class="lb-rank">'+(i+1)+'</td><td style="font-weight:700">'+e.username.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'})[c])+'</td><td class="bal">'+e.wagered.toLocaleString()+'</td><td>'+e.wins+'</td></tr>'
+  ).join(''):'<tr><td colspan="4"><div class="empty">No entries this week.</div></td></tr>';
+}
+async function settleTourn(){
+  if(!confirm('Settle current week NOW? Prizes awarded to top 3.'))return;
+  const d=await api('/admin/tournament/settle');
+  if(d.ok){
+    const msg=d.awarded.map(x=>'#'+x.rank+' '+x.username+' → +'+x.prize.toLocaleString()+' CR').join(' | ');
+    $('#twAdminMsg').style.color='#2ee56b';
+    $('#twAdminMsg').textContent='✅ Settled: '+msg;
+    loadTournament();
+  }
+}
+
+function renderTable(skipFlash,flashId,isUp){
+  const q=$('#searchBox').value.toLowerCase();
+  const rows=USERS.filter(u=>!q||u.username.toLowerCase().includes(q));
+  $('#tbody').innerHTML=rows.length?rows.map(u=>{
+    let cls='';
+    if(!skipFlash&&prevBal[u.id]!==undefined&&prevBal[u.id]!==u.balance)
+      cls=u.balance>prevBal[u.id]?'flash-up':'flash-down';
+    prevBal[u.id]=u.balance;
+    return '<tr class="'+cls+'" data-uid="'+u.id+'">'
+      +'<td><div class="uname"><span class="mini-dot '+(Date.now()-u.lastSeen<12000?'on':'')+'"></span>'
+      +(u.banned?'<span class="tag ban">BANNED</span>':'')
+      +u.username.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'})[c])+'</div></td>'
+      +'<td><span class="bal">'+u.balance.toLocaleString()+'</span> CR</td>'
+      +'<td>'+(u.wagered||0).toLocaleString()+'</td>'
+      +'<td>'+(Date.now()-u.createdAt<36e5?'<span style="color:#2ee56b;font-size:.75rem">NEW</span>':new Date(u.createdAt).toLocaleDateString())+'</td>'
+      +'<td><div class="row-btns">'
+      +'<button class="rb add" onclick="op(\''+u.id+'\',\'add\')">+</button>'
+      +'<button class="rb sub" onclick="op(\''+u.id+'\',\'sub\')">−</button>'
+      +'<button class="rb set" onclick="op(\''+u.id+'\',\'set\')">=</button>'
+      +'<input class="op-input" data-uid="'+u.id+'" type="number" min="0" placeholder="amt" value="'+(inputs[u.id]||'')+'">'
+      +'<button class="rb msg" title="Send notification" onclick="msgUser(\''+u.id+'\')">✉</button>'
+      +'<button class="rb ban" onclick="banUser(\''+u.id+'\')">'+(u.banned?'✅':'🚫')+'</button>'
+      +'<button class="rb del" onclick="delUser(\''+u.id+'\')">🗑</button>'
+      +'</div></td></tr>';
+  }).join(''):'<tr><td colspan="5"><div class="empty">No players yet — registrations appear here live.</div></td></tr>';
+  if(flashId&&!skipFlash){
+    const tr=document.querySelector('tr[data-uid="'+flashId+'"]');
+    if(tr){tr.classList.remove('flash-up','flash-down');void tr.offsetWidth;tr.classList.add(isUp?'flash-up':'flash-down')}
+  }
+}
+$('#searchBox').addEventListener('input',()=>renderTable(true));
+
+async function loadStats(){
+  const d=await api('/admin/stats');
+  if(!d.ok)return;
+  const s=d.stats;
+  hist=s.history||hist.concat([{t:Date.now(),on:s.online,bal:s.totalBalance}]).slice(-48);
+  $('#statCards').innerHTML=[
+    [s.players,'Players'],[s.online,'Online'],[s.newToday,'New Today'],
+    [s.totalBalance.toLocaleString(),'Total Balance'],[s.totalWagered.toLocaleString(),'Total Wagered']
+  ].map(([v,l])=>'<div class="card"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>').join('');
+  $('#topBody').innerHTML=s.top.length?s.top.map((u,i)=>
+    '<tr><td>'+(i+1)+'</td><td class="uname">'+u.username.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'})[c])+'</td>'
+    +'<td class="bal">'+(u.wagered||0).toLocaleString()+'</td><td>'+u.balance.toLocaleString()+'</td></tr>'
+  ).join(''):'<tr><td colspan="4"><div class="empty">No wagers yet.</div></td></tr>';
+  const maxOn=Math.max(1,...hist.map(h=>h.on));
+  const maxBal=Math.max(1,...hist.map(h=>h.bal));
+  $('#chart').innerHTML=hist.map(h=>
+    '<div class="bar" style="height:'+(h.on/maxOn*100)+'%" title="'+h.on+' online · '+h.bal.toLocaleString()+' CR"></div>'
+  ).join('');
+}
+</script>
+</body>
+</html>
