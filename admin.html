@@ -52,7 +52,7 @@ tr:hover td{background:#141c2d}
 .wd-chip.pending{background:rgba(240,185,11,.15);color:#f0b90b;border:1px solid rgba(240,185,11,.4)}
 .wd-chip.paid{background:rgba(46,229,107,.13);color:#2ee56b;border:1px solid rgba(46,229,107,.4)}
 .wd-chip.rejected{background:rgba(255,91,91,.13);color:#ff5b5b;border:1px solid rgba(255,91,91,.4)}
-.op-input{width:74px;padding:5px 7px;background:#0d1320;border:1px solid #2b3648;border-radius:7px;color:#fff;font-size:.82rem}
+.op-input{width:90px;padding:6px 8px;background:#0d1320;border:1px solid #3b4a63;border-radius:7px;color:#f0b90b;font-size:.9rem;font-weight:700}
 .hint{color:#8b93a7;font-size:.78rem;margin:8px 0 14px}
 .ctl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;max-width:900px}
 .ctl{background:#111827;border:1px solid #232c3d;border-radius:12px;padding:16px}
@@ -311,11 +311,16 @@ function saveInputs(){
 }
 
 function op(uid,mode){
-  const raw=inputs[uid]??prompt((mode==='add'?'+ Add':mode==='sub'?'− Deduct':'Set balance to')+' amount:');
-  if(raw===null)return;
+  const inp=document.querySelector('.op-input[data-uid="'+uid+'"]');
+  const raw=inp?inp.value:inputs[uid];
+  if(!raw){return}
   const v=parseFloat(raw);
   if(!Number.isFinite(v)||v<0)return;
-  api('/admin/balance',{userId:uid,mode,value:v}).then(refreshRow);
+  api('/admin/balance',{userId:uid,mode,value:v}).then(d=>{
+    if(inp)inp.value='';
+    delete inputs[uid];
+    refreshRow(d);
+  });
 }
 async function refreshRow(d){
   if(!d||!d.ok||!d.user)return;
@@ -424,10 +429,10 @@ function renderTable(skipFlash,flashId,isUp){
       +'<td>'+(u.wagered||0).toLocaleString()+'</td>'
       +'<td>'+(Date.now()-u.createdAt<36e5?'<span style="color:#2ee56b;font-size:.75rem">NEW</span>':new Date(u.createdAt).toLocaleDateString())+'</td>'
       +'<td><div class="row-btns">'
+      +'<input class="op-input" data-uid="'+u.id+'" type="number" min="0" placeholder="amount" value="'+(inputs[u.id]||'')+'">'
       +'<button class="rb add" onclick="op(\''+u.id+'\',\'add\')">+</button>'
       +'<button class="rb sub" onclick="op(\''+u.id+'\',\'sub\')">−</button>'
       +'<button class="rb set" onclick="op(\''+u.id+'\',\'set\')">=</button>'
-      +'<input class="op-input" data-uid="'+u.id+'" type="number" min="0" placeholder="amt" value="'+(inputs[u.id]||'')+'">'
       +'<button class="rb msg" title="Send notification" onclick="msgUser(\''+u.id+'\')">✉</button>'
       +'<button class="rb ban" onclick="banUser(\''+u.id+'\')">'+(u.banned?'✅':'🚫')+'</button>'
       +'<button class="rb del" onclick="delUser(\''+u.id+'\')">🗑</button>'
@@ -439,6 +444,7 @@ function renderTable(skipFlash,flashId,isUp){
   }
 }
 $('#searchBox').addEventListener('input',()=>renderTable(true));
+document.addEventListener('input',function(e){if(e.target.classList.contains('op-input')&&e.target.dataset.uid){inputs[e.target.dataset.uid]=e.target.value}});
 
 async function loadStats(){
   const d=await api('/admin/stats');
