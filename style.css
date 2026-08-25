@@ -561,15 +561,106 @@ footer{text-align:center;color:var(--muted);font-size:.78rem;padding:16px;border
 .controls.col input[type=text],.controls.col input[type=password]{width:100%}
 
 @media(max-width:640px){
-  .topbar{padding:10px 12px}
-  .brand{font-size:1.1rem}
-  .wheel-box{width:240px;height:240px}
-  .reel{width:90px;height:105px;font-size:3rem}
+  .topbar{padding:8px 10px;gap:6px}
+  .brand{font-size:1rem}
+  .brand-icon{display:none}
+  .top-actions{gap:6px}
+  .balance-chip{padding:6px 10px;font-size:.82rem}
+  .balance-chip small{display:none}
+  .avatar{width:34px;height:34px;font-size:.9rem}
+  .icon-btn{width:36px;height:36px;font-size:1rem}
+  .mainnav{gap:5px;padding:10px 8px 2px;justify-content:stretch}
+  .navbtn{font-size:.82rem;padding:7px 10px;flex:1;min-width:0;text-align:center}
+  main{padding:12px 10px 70px}
+  .hero-grid{grid-template-columns:1fr;gap:10px;margin-bottom:18px}
+  .promo{min-height:110px;padding:16px}
+  .promo h3{font-size:1rem}
+  .games-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .game-card{padding:14px 8px;border-radius:10px}
+  .game-card .gc-emoji{font-size:1.8rem}
+  .gc-name{font-size:.78rem;margin-top:4px}
+  .gc-sub{font-size:.68rem}
+  .casino-tabs{gap:6px;margin-bottom:14px;padding-bottom:4px}
+  .ctab{padding:7px 14px;font-size:.82rem}
+  .cgame{padding:14px;border-radius:12px}
+  .cgame h2{font-size:1.1rem}
+  .hint{font-size:.8rem;margin-bottom:12px}
+  .controls{gap:8px;margin-top:14px}
+  input[type=number]{width:80px;padding:8px 10px;font-size:.9rem}
+  .btn{padding:9px 18px;font-size:.88rem;border-radius:10px}
+  .result{font-size:1rem;margin-top:10px}
+  .reels{gap:10px}
+  .reel{width:85px;height:100px;font-size:3rem;border-radius:10px}
+  .paytable{font-size:.72rem;gap:5px}
+  .wheel-box{width:200px;height:200px}
+  .roul-wrap{flex-direction:column;align-items:center}
+  .roul-side{min-width:0;width:100%}
+  .bet-options{gap:6px}
+  .bet-opt{padding:8px 12px;font-size:.82rem}
+  #crashStage{height:180px}
   #crashMult{font-size:2.2rem}
-  .match{grid-template-columns:1fr}
-  .m-odds{justify-content:space-between}
-  .odd{min-width:0;flex:1}
+  #rocket{font-size:2.2rem}
   .dice-roll{font-size:2.4rem}
+  .bj-table{padding:14px}
+  .card{width:46px;height:64px;font-size:.9rem}
+  .cards{min-height:60px;gap:6px}
+  .mines-grid{grid-template-columns:repeat(5,48px);grid-auto-rows:48px;gap:6px}
+  .mine-cell{font-size:1.2rem;border-radius:8px}
+  .plinko-board{height:220px}
+  .pbucket{padding:7px 0;font-size:.66rem}
+  .hilo-card{width:120px;height:170px}
+  .hc-rank{font-size:2.4rem}
+  .hc-suit{font-size:1.5rem}
+  .hilo-wrap{flex-direction:column;align-items:center}
+  .hilo-side{min-width:0;width:100%}
+  .betslip{width:96vw;padding:10px 12px;bottom:8px}
+  .slip-match{font-size:.82rem}
+  .slip-actions input{width:80px}
+  .leaders-grid{grid-template-columns:1fr}
+  .lb-table{font-size:.78rem}
+  .lb-table th,.lb-table td{padding:7px 8px}
+  .match{padding:12px;grid-template-columns:1fr;gap:6px}
+  .m-odds{justify-content:stretch}
+  .odd{min-width:0;flex:1;padding:8px 4px;font-size:.85rem}
+  .wallet-grid{grid-template-columns:1fr}
+  .wsum-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .wcard{padding:14px}
+  .wcard .wc-val{font-size:1.3rem}
+  .gold-card .wc-val{font-size:1.5rem}
+  .tx-tabs{gap:4px;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
+  .tx-tab{padding:6px 14px;font-size:.78rem;white-space:nowrap}
+  .tx-filters{gap:5px}
+  .tx-filters select{padding:6px 10px;font-size:.75rem}
+  .analytics-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .ana-card{padding:12px}
+  .ana-val{font-size:1.2rem}
+  .tw-body{flex-direction:column;align-items:flex-start;gap:10px}
+  .tw-rank{min-width:0}
+  .wd-row{gap:8px}
+  .wd-amt{min-width:70px;font-size:.82rem}
+  .promo-redeem-row{flex-direction:column}
+  .promo-redeem-row .btn{width:100%}
+  .pw-box input{font-size:.9rem}
+  .mission{gap:10px;padding:10px 0}
+  .m-emoji{font-size:1.4rem}
+  .m-name{font-size:.85rem}
+  .m-action{min-width:80px}
+  .m-reward{font-size:.78rem}
+  #notifPanel{right:8px;width:min(300px,94vw)}
+  .match{font-size:.88rem}
+  .m-teams{font-size:.9rem}
+  footer{padding:20px 12px}
+  .sec-title{font-size:.95rem;margin:16px 0 10px}
+  .wd-note{font-size:.72rem;padding:8px 10px}
+  .mines-wrap{flex-direction:column;gap:14px}
+  .mines-side{min-width:0;width:100%}
+  .tournament-widget{overflow-x:auto}
+  .tw-table{font-size:.75rem;min-width:300px}
+  .wpanel .controls input[type=number]{min-width:120px}
+}
+@media(min-width:641px) and (max-width:900px){
+  .games-grid{grid-template-columns:repeat(4,1fr)}
+  .wallet-grid{grid-template-columns:1fr 1fr}
 }
 
 /* ===== v3 additions: bell, daily wheel, notif panel, lock, pw ===== */
