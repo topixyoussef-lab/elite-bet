@@ -277,15 +277,27 @@ input[type=number]{
   background:linear-gradient(180deg,#070d1c,#0d1424);
   border:2px solid var(--line);border-radius:16px;
 }
+#crashStage::before{content:'';position:absolute;inset:0;background-image:radial-gradient(1px 1px at 10% 20%,#fff 50%,transparent),radial-gradient(1px 1px at 30% 60%,#fff 50%,transparent),radial-gradient(1.5px 1.5px at 55% 15%,#fff 50%,transparent),radial-gradient(1px 1px at 70% 45%,#fff 50%,transparent),radial-gradient(1px 1px at 85% 70%,#fff 50%,transparent),radial-gradient(1.5px 1.5px at 20% 80%,#fff 50%,transparent),radial-gradient(1px 1px at 45% 35%,#fff 50%,transparent),radial-gradient(1px 1px at 90% 10%,#fff 50%,transparent);animation:twinkle 3s ease-in-out infinite alternate}
+@keyframes twinkle{0%{opacity:.5}100%{opacity:1}}
 #crashMult{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
   font-size:3rem;font-weight:900;color:#fff;
   text-shadow:0 0 24px rgba(20,119,255,.6);
 }
-#rocket{position:absolute;left:2%;bottom:6%;font-size:2.2rem}
+#rocket{position:absolute;left:2%;bottom:6%;width:48px;height:64px}
+#rocket .r-body{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:20px;height:36px;background:linear-gradient(180deg,#e0e8f0,#8899aa);border-radius:50% 50% 4px 4px;box-shadow:0 0 12px rgba(100,180,255,.3)}
+#rocket .r-nose{position:absolute;bottom:52px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:16px solid #f0b90b}
+#rocket .r-fin-l{position:absolute;bottom:18px;left:2px;width:10px;height:14px;background:#c0392b;border-radius:0 0 0 6px;transform:skewX(10deg)}
+#rocket .r-fin-r{position:absolute;bottom:18px;right:2px;width:10px;height:14px;background:#c0392b;border-radius:0 0 6px 0;transform:skewX(-10deg)}
+#rocket .r-window{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);width:8px;height:8px;background:radial-gradient(circle,#5dade2,#1a5276);border:1px solid #aed6f1;border-radius:50%}
+#rocket .r-flame{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:16px;height:20px;background:linear-gradient(180deg,#f39c12,#e74c3c,#ff4500);border-radius:0 0 50% 50%;animation:flicker .15s infinite alternate;filter:blur(1px)}
+@keyframes flicker{0%{height:18px;opacity:.85}100%{height:24px;opacity:1}}
+#rocket .r-trail{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);width:8px;height:14px;background:linear-gradient(180deg,rgba(255,165,0,.4),transparent);border-radius:0 0 50% 50%;filter:blur(3px)}
 #crashStage.crashed{animation:shake .4s}
 #crashStage.crashed #crashMult{color:#ff6b5e}
 #crashStage.cashed #crashMult{color:#2fd06d}
+.crash-particle{position:absolute;width:6px;height:6px;border-radius:50%;pointer-events:none;animation:explode .6s ease-out forwards;z-index:10}
+@keyframes explode{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
 
 .dice-box{background:#0d1424;border:1px solid var(--line);border-radius:16px;padding:24px}

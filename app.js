@@ -559,6 +559,8 @@ function crashLoop(now){
   const p=Math.min(1,Math.log(m)/Math.log(30));
   $('#rocket').style.left=(2+p*78)+'%';
   $('#rocket').style.bottom=(6+p*p*70)+'%';
+  const flame=$('#rocket .r-flame');
+  if(flame){const s=1+Math.min(p*1.5,.8);flame.style.transform='translateX(-50%) scaleX('+s+') scaleY('+(1+Math.min(p,.6))+')';flame.style.filter='blur('+(1+p*2)+'px)'}
   crashRAF=requestAnimationFrame(crashLoop);
 }
 $('#crashCashout').addEventListener('click',()=>{
@@ -586,7 +588,10 @@ function crashEnd(){
   renderCrashHistory();
   pushFair('Crash',crashPoint.toFixed(2)+'x',pendingCrashNonce);
   $('#crashMult').textContent=crashPoint.toFixed(2)+'x';
-  $('#crashStage').classList.add('crashed');
+  const stage=$('#crashStage');
+  stage.classList.add('crashed');
+  const rl=$('#rocket');const rx=rl.style.left;const ry=rl.style.bottom;
+  for(let i=0;i<12;i++){const p=document.createElement('div');p.className='crash-particle';p.style.left=rx;p.style.bottom=ry;p.style.setProperty('--dx',(Math.random()-.5)*80+'px');p.style.setProperty('--dy',(Math.random()-.5)*80+'px');p.style.background=['#f39c12','#e74c3c','#ff4500','#f1c40f'][i%4];stage.appendChild(p);setTimeout(()=>p.remove(),600)}
   $('#crashCashout').disabled=true;
   $('#crashStart').disabled=false;
   crashState='idle';
