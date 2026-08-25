@@ -544,6 +544,7 @@ $('#crashStart').addEventListener('click',async()=>{
   $('#crashMsg').textContent='';
   $('#crashMsg').className='result';
   $('#crashStage').classList.remove('crashed','cashed');
+  $('#crashStage').classList.add('flying');
   $('#rocket').style.left='2%';
   $('#rocket').style.bottom='6%';
   if(!takeBet(bet,'Crash launch')){crashState='idle';$('#crashStart').disabled=true;return}
@@ -559,8 +560,6 @@ function crashLoop(now){
   const p=Math.min(1,Math.log(m)/Math.log(30));
   $('#rocket').style.left=(2+p*78)+'%';
   $('#rocket').style.bottom=(6+p*p*70)+'%';
-  const flame=$('#rocket .r-flame');
-  if(flame){const s=1+Math.min(p*1.5,.8);flame.style.transform='translateX(-50%) scaleX('+s+') scaleY('+(1+Math.min(p,.6))+')';flame.style.filter='blur('+(1+p*2)+'px)'}
   crashRAF=requestAnimationFrame(crashLoop);
 }
 $('#crashCashout').addEventListener('click',()=>{
@@ -575,6 +574,7 @@ $('#crashCashout').addEventListener('click',()=>{
   crashState='idle';
   $('#crashCashout').disabled=true;
   $('#crashStart').disabled=false;
+  $('#crashStage').classList.remove('flying');
   $('#crashStage').classList.add('cashed');
   $('#crashMult').textContent=m.toFixed(2)+'x';
   $('#crashMsg').textContent='✅ Cashed out at '+m.toFixed(2)+'x — won '+fmt(win)+' CR';
@@ -589,6 +589,7 @@ function crashEnd(){
   pushFair('Crash',crashPoint.toFixed(2)+'x',pendingCrashNonce);
   $('#crashMult').textContent=crashPoint.toFixed(2)+'x';
   const stage=$('#crashStage');
+  stage.classList.remove('flying');
   stage.classList.add('crashed');
   const rl=$('#rocket');const rx=rl.style.left;const ry=rl.style.bottom;
   for(let i=0;i<12;i++){const p=document.createElement('div');p.className='crash-particle';p.style.left=rx;p.style.bottom=ry;p.style.setProperty('--dx',(Math.random()-.5)*80+'px');p.style.setProperty('--dy',(Math.random()-.5)*80+'px');p.style.background=['#f39c12','#e74c3c','#ff4500','#f1c40f'][i%4];stage.appendChild(p);setTimeout(()=>p.remove(),600)}

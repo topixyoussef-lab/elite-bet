@@ -284,15 +284,9 @@ input[type=number]{
   font-size:3rem;font-weight:900;color:#fff;
   text-shadow:0 0 24px rgba(20,119,255,.6);
 }
-#rocket{position:absolute;left:2%;bottom:6%;width:48px;height:64px}
-#rocket .r-body{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:20px;height:36px;background:linear-gradient(180deg,#e0e8f0,#8899aa);border-radius:50% 50% 4px 4px;box-shadow:0 0 12px rgba(100,180,255,.3)}
-#rocket .r-nose{position:absolute;bottom:52px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:16px solid #f0b90b}
-#rocket .r-fin-l{position:absolute;bottom:18px;left:2px;width:10px;height:14px;background:#c0392b;border-radius:0 0 0 6px;transform:skewX(10deg)}
-#rocket .r-fin-r{position:absolute;bottom:18px;right:2px;width:10px;height:14px;background:#c0392b;border-radius:0 0 6px 0;transform:skewX(-10deg)}
-#rocket .r-window{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);width:8px;height:8px;background:radial-gradient(circle,#5dade2,#1a5276);border:1px solid #aed6f1;border-radius:50%}
-#rocket .r-flame{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:16px;height:20px;background:linear-gradient(180deg,#f39c12,#e74c3c,#ff4500);border-radius:0 0 50% 50%;animation:flicker .15s infinite alternate;filter:blur(1px)}
-@keyframes flicker{0%{height:18px;opacity:.85}100%{height:24px;opacity:1}}
-#rocket .r-trail{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);width:8px;height:14px;background:linear-gradient(180deg,rgba(255,165,0,.4),transparent);border-radius:0 0 50% 50%;filter:blur(3px)}
+#rocket{position:absolute;left:2%;bottom:6%;font-size:2.8rem;filter:drop-shadow(0 0 12px rgba(255,165,0,.7)) drop-shadow(0 4px 8px rgba(0,0,0,.5));transition:filter .3s;z-index:5}
+#crashStage.flying #rocket{animation:rocketBob .8s ease-in-out infinite alternate}
+@keyframes rocketBob{0%{transform:translateY(0) rotate(-15deg)}100%{transform:translateY(-4px) rotate(-25deg)}}
 #crashStage.crashed{animation:shake .4s}
 #crashStage.crashed #crashMult{color:#ff6b5e}
 #crashStage.cashed #crashMult{color:#2fd06d}
