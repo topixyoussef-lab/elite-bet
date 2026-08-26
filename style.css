@@ -577,8 +577,8 @@ footer{text-align:center;color:var(--muted);font-size:.78rem;padding:16px;border
   .hero-grid{grid-template-columns:1fr;gap:10px;margin-bottom:18px}
   .promo{min-height:110px;padding:16px}
   .promo h3{font-size:1rem}
-  .mainnav{gap:5px;padding:10px 8px 2px;justify-content:stretch}
-  .navbtn{font-size:.78rem;padding:7px 6px;flex:1;min-width:0;text-align:center;border-radius:8px}
+  .mainnav{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:10px 8px 2px}
+  .navbtn{font-size:.78rem;padding:8px 4px;text-align:center;border-radius:8px}
   .games-grid{grid-template-columns:repeat(3,1fr);gap:8px}
   .game-card{padding:14px 6px;border-radius:10px}
   .game-card .gc-emoji{font-size:1.6rem}
