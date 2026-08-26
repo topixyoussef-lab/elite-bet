@@ -15,6 +15,7 @@ const DB_PATH=path.join(__dirname,'data','db.json');
 app.get('/admin.html',function(req,res){res.status(404).send('Not found')});
 app.get('/admin',function(req,res){res.status(404).send('Not found')});
 app.get('/'+ADMIN_SECRET,function(req,res){res.sendFile(path.join(__dirname,'..','admin.html'))});
+app.get('/health',function(req,res){res.json({ok:true})});
 
 app.use(express.static(__dirname+'/..'));
 
@@ -523,7 +524,7 @@ app.post('/api/deposit',async(req,res)=>{
   }
 });
 
-app.listen(PORT,()=>{
+app.listen(PORT,'0.0.0.0',()=>{
   console.log('ELITE BET server running on port '+PORT);
   console.log('Admin panel: http://localhost:'+PORT+'/'+ADMIN_SECRET);
 });
